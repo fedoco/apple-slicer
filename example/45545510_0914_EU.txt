@@ -1,0 +1,10 @@
+Start Date	End Date	UPC	ISRC/ISBN	Vendor Identifier	Quantity	Partner Share	Extended Partner Share	Partner Share Currency	Sales or Return	Apple Identifier	Artist/Show/Developer/Author	Title	Label/Studio/Network/Developer/Publisher	Grid	Product Type Identifier	ISAN/Other Identifier	Country Of Sale	Pre-order Flag	Promo Code	Customer Price	Customer Currency
+08/31/2014	09/27/2014			Example App 5	-1	12.17	-12.17	EUR	R	258801387	Developer	Example App 5			F1		DE			-19.99	EUR
+08/31/2014	09/27/2014			Example App 5	2	0.00	0.00	EUR	S	258801387	Developer	Example App 5			F1		DE		CR	0.00	EUR
+08/31/2014	09/27/2014			Example App 5	1	12.17	12.17	EUR	S	258801387	Developer	Example App 5			F1		FI			19.99	EUR
+08/31/2014	09/27/2014			Example App 6	2	12.17	24.34	EUR	S	238100296	Developer	Example App 6			F1		DE			19.99	EUR
+08/31/2014	09/27/2014			Example App 5	14	12.17	170.38	EUR	S	258801387	Developer	Example App 5			F1		DE			19.99	EUR
+08/31/2014	09/27/2014			Example App 5	1	12.17	12.17	EUR	S	258801387	Developer	Example App 5			F1		FR			19.99	EUR
+Total_Rows	6
+Total_Amount	206.89
+Total_Units	20

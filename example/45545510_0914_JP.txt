@@ -1,0 +1,6 @@
+Start Date	End Date	UPC	ISRC/ISBN	Vendor Identifier	Quantity	Partner Share	Extended Partner Share	Partner Share Currency	Sales or Return	Apple Identifier	Artist/Show/Developer/Author	Title	Label/Studio/Network/Developer/Publisher	Grid	Product Type Identifier	ISAN/Other Identifier	Country Of Sale	Pre-order Flag	Promo Code	Customer Price	Customer Currency
+08/31/2014	09/27/2014			Example App 3	1	119.00	119.00	JPY	S	225836855	Developer	Example App 3			1F		JP			170.00	JPY
+08/31/2014	09/27/2014			Example App 4	1	60.00	60.00	JPY	S	275852591	Developer	Example App 4			1		JP			85.00	JPY
+Total_Rows	2
+Total_Amount	179
+Total_Units	2

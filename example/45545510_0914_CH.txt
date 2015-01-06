@@ -1,0 +1,8 @@
+Start Date	End Date	UPC	ISRC/ISBN	Vendor Identifier	Quantity	Partner Share	Extended Partner Share	Partner Share Currency	Sales or Return	Apple Identifier	Artist/Show/Developer/Author	Title	Label/Studio/Network/Developer/Publisher	Grid	Product Type Identifier	ISAN/Other Identifier	Country Of Sale	Pre-order Flag	Promo Code	Customer Price	Customer Currency
+08/31/2014	09/27/2014			Example App 1	16	1.30	20.80	CHF	S	283459501	Developer	Example App 1			1F		CH			2.00	CHF
+08/31/2014	09/27/2014			Example App 2	5	0.65	3.25	CHF	S	281153214	Developer	Example App 2			1F		CH			1.00	CHF
+08/31/2014	09/27/2014			Example App 3	6	1.30	7.80	CHF	S	225836855	Developer	Example App 3			1F		CH			2.00	CHF
+08/31/2014	09/27/2014			Example App 4	2	0.65	1.30	CHF	S	275852591	Developer	Example App 4			1		CH			1.00	CHF
+Total_Rows	4
+Total_Amount	33.15
+Total_Units	29
