@@ -227,7 +227,7 @@ Australia"""
 Markham, ON L3R 5G2
 Canada"""
     elif corporation == 'EU':
-        return """iTunes S.á.r.l.
+        return """iTunes S.à.r.l.
 31-33 rue Sainte Zithe
 2763 Luxembourg
 Luxembourg
