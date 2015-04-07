@@ -28,7 +28,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import sys, os, csv, locale
+import sys, os, re, csv, locale
 import apple
 from decimal import Decimal
 from datetime import datetime
@@ -90,7 +90,7 @@ def parse_financial_reports(workingdir):
 
     for filename in os.listdir(workingdir):
         # skip files that are not financial reports
-        if not filename.endswith('txt') or filename == currency_data_filename:
+        if filename == currency_data_filename or not re.match(r'.*_[A-Z][A-Z]\.txt$', filename):
             continue
 
         f = open(workingdir + '/' + filename, 'r')
@@ -122,10 +122,15 @@ def parse_financial_reports(workingdir):
             # special case affecting countries Apple put in the "Rest of World" group: currency for those is listed as "USD"
             # in the sales reports but the corresponding exchange rate is labelled "USD - RoW" - a pragmatic way of identifying
             # those "RoW" countries is to inspect the filename of the sales report
-            if "_WW." in filename:
+            if "_WW." in filename and currency == "USD":
               currencies[countrycode] = "USD - RoW"
 
         f.close()
+
+    # break if we didn't read any meaningful data
+    if not countries:
+      print 'No valid iTunes Connect financial reports (*.txt) found in ' + workingdir
+      sys.exit(1)
 
     return countries, currencies, date_range 
 
