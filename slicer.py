@@ -119,6 +119,12 @@ def parse_financial_reports(workingdir):
             # remember currency of current line's country
             currencies[countrycode] = currency
 
+            # special case affecting countries Apple put in the "Rest of World" group: currency for those is listed as "USD"
+            # in the sales reports but the corresponding exchange rate is labelled "USD - RoW" - a pragmatic way of identifying
+            # those "RoW" countries is to inspect the filename of the sales report
+            if "_WW." in filename:
+              currencies[countrycode] = "USD - RoW"
+
         f.close()
 
     return countries, currencies, date_range 
