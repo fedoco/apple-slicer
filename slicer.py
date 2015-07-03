@@ -165,6 +165,9 @@ def print_sales_by_corporation(sales, currencies):
                     exchange_rate, tax_factor = currency_data[country_currency]
                     amount_in_local_currency = amount * Decimal(exchange_rate) * Decimal(tax_factor)
 
+                    # subtract local tax(es) if applicable in country (f. ex. in JPY)
+                    amount -= amount - amount * Decimal(tax_factor)
+
                 print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency, format_currency(amount),
                 exchange_rate, format_currency(amount_in_local_currency), local_currency.replace('EUR', '€'))
 
