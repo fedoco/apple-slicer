@@ -56,7 +56,7 @@ def format_currency(number):
     return locale.currency(number, False, True)
 
 def parse_currency_data(filename):
-    """Parse exchange rate and withholding tax rate (relevant f. ex. for JPY revenue) for each currency listed in the given file."""
+    """Parse exchange rate and taxation factor (relevant f. ex. for JPY revenue) for each currency listed in the given file."""
 
     d = {}
 
@@ -72,10 +72,13 @@ def parse_currency_data(filename):
         if not len(line) > 10:
             continue 
         currency = line[0]
-        exchange_rate = line[8]
-        withholding_tax_factor = 1.0 - abs(float(line[4].replace(',', '')) / float(line[3].replace(',', '')))
+        exchange_rate = float(line[8].replace(',', ''))
+        amount_pre_tax = float(line[3].replace(',', ''))
+        amount_after_tax = float(line[7].replace(',', ''))
+        tax = amount_pre_tax - amount_after_tax
+        tax_factor = 1.0 - abs(tax / amount_pre_tax)
 
-        d[currency] = exchange_rate, withholding_tax_factor
+        d[currency] = exchange_rate, tax_factor
 
     f.close()
 
@@ -159,8 +162,8 @@ def print_sales_by_corporation(sales, currencies):
                 amount_in_local_currency = amount
 
                 if not country_currency == local_currency:
-                    exchange_rate, withholding_tax_factor = currency_data[country_currency]
-                    amount_in_local_currency = amount * Decimal(exchange_rate) * Decimal(withholding_tax_factor)
+                    exchange_rate, tax_factor = currency_data[country_currency]
+                    amount_in_local_currency = amount * Decimal(exchange_rate) * Decimal(tax_factor)
 
                 print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency, format_currency(amount),
                 exchange_rate, format_currency(amount_in_local_currency), local_currency.replace('EUR', '€'))
