@@ -36,29 +36,24 @@ You can use the output of the script to help genereating *Reverse Charge* invoic
 
 ## How?
 
-From iTunes Connect, download your financial reports of the desired billing month into an appropriately named directory.
-For example, if you want your sales for January, 2015 to be split, download the financial reports for 2015/01 and move the resulting `*0115.txt` into a directory named `0115`.
+In iTunes Connect go to *Payments & Financial Reports* and download your financial reports of the desired billing month into an appropriately named directory.
+For example, if you want your sales for January, 2016 to be split, download the financial reports for 2016/01 and move the resulting `*0116*.txt` into a directory named `0116`.
 
 Additionally, in order to display revenue in your local currency, the script needs the currency exchange rates and tax withholding amounts that were applicable at the time of the payment.
-They aren't included in the financial report files, but luckily iTunes Connect has them available for you. In iTunes Connect, go to *Payments & Financial Reports* > *Payments* and just copy-paste the listing under *Earned / Paid on* corresponding to the financial report into a file named `currency_data.txt`. It should look similar to this:
+They aren't included in the financial report files, but luckily iTunes Connect has them available for you in an extra file which can be downloaded by clicking on the small blue icon right above the *Estimated Earnings* column. 
+Place this file in the same directory as the previously downloaded reports. It should be named `financial_report.csv`.
 
-```text
-CHF      0.00    33.15   33.15   0.00    0.00    0.00    33.15   0.80030         26.53  EUR
-EUR      0.00    206.89  206.89  0.00    0.00    0.00    206.89  1.00000         206.89 EUR
-JPY      0.00    179     179     -37     0.00    0.00    142     0.00817         1.16   EUR
-```
-
-You are then ready to execute the script with the reports directory as parameter:
+You are now ready to execute the script with the reports directory as parameter:
 
 ```sh
-./slicer.py ~/Downloads/iTunesFinancialReports/0115
+./slicer.py ~/Downloads/iTunesFinancialReports/0116
 ```
 ### Example output
 
 The script generates tab-delimited output, more or less ready to be pasted into your favourite billing and/or tax return application.
 
 ```text
-Sales date: 31.08.2014 - 27.09.2014 
+Sales date: 31.12.2015 - 27.01.2016 
 
 iTunes S.à.r.l.
 31-33 rue Sainte Zithe

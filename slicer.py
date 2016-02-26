@@ -41,9 +41,9 @@ local_currency = 'EUR'
 # desired locale used for formatting dates and prices
 locale.setlocale(locale.LC_ALL, 'de_DE')
 
-# name of file in which currency exchange rates are listed - these can be copy-pasted from iTunes Connect's
-# "Payments & Financial Reports > Payments" page and need to match the financial reports' date range
-currency_data_filename = 'currency_data.txt'
+# name of CSV file in which currency exchange rates are listed - can be downloaded from iTunes Connect's
+# "Payments & Financial Reports" page and needs to match the financial reports' date range
+currency_data_filename = 'financial_report.csv'
 
 # -------------------------------------------------------------------------------------------------------------------------------------
 
@@ -64,14 +64,24 @@ def parse_currency_data(filename):
         f = open(filename, 'r')
     except IOError:
       print 'Exchange rates data file missing: "%s"' % filename + '\n'
-      print 'You can create this file by copy-pasting the listing under',
-      print '"Earned / Paid on" of iTunes Connect\'s "Payments & Financial Reports > Payments" page'
+      print 'You can download this file from iTunes Connect\'s "Payments & Financial Reports" page'
       sys.exit(1)
 
-    for line in csv.reader(f, delimiter = '\t'):
-        if not len(line) > 10:
-            continue 
-        currency = line[0]
+    # skip first three lines of garbage
+    skip = 3
+
+    for line in csv.reader(f, delimiter = ','):
+        skip = skip - 1
+        if skip >= 0 or not len(line) == 12:
+            continue
+
+        # extract currency symbol from parentheses
+        r = re.search('\(([A-Z]{3})\)$', line[0])
+        if not r:
+            print 'Aborting: Encountered line without a valid currency symbol'
+            sys.exit(1)
+        currency = r.group(1)
+ 
         exchange_rate = float(line[8].replace(',', ''))
         amount_pre_tax = float(line[3].replace(',', ''))
         amount_after_tax = float(line[7].replace(',', ''))
@@ -182,7 +192,7 @@ if __name__ == '__main__':
         print 'Apple Slicer\n'
         print 'Usage: ' + sys.argv[0] + ' <directory>\n'
         print 'Directory must contain iTunes Connect financial reports (*.txt) and a file named "' + currency_data_filename + '"'
-        print 'which contains matching currency data copy-pasted from iTunes Connect\'s "Payments & Financial Reports > Payments" page'
+        print 'which contains matching currency data downloaded from iTunes Connect\'s "Payments & Financial Reports" page'
         sys.exit(1)
 
     workingdir = sys.argv[1]
