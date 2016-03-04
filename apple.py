@@ -222,9 +222,9 @@ Level 13, Capital Centre
 Sydney South NSW 2000
 Australia"""
     elif corporation == 'CA':
-        return """Apple Canada, Inc.
-7495 Birchmount Road
-Markham, ON L3R 5G2
+        return """Apple Canada Inc.
+120 Bremner Boulevard, Suite 1600
+Toronto, ON M5J 0A8
 Canada"""
     elif corporation == 'EU':
         return """iTunes S.à.r.l.
@@ -234,8 +234,8 @@ Luxembourg
 VAT ID: LU20165772"""
     elif corporation == 'JP':
         return """iTunes K.K.
-〒 163-1480
-3-20-2 Nishi-Shinjuku, Shinjuku-ku, Tokyo
+〒 106-6140
+6-10-1 Roppongi, Minato-ku, Tokyo
 Japan"""
     elif corporation == 'US':
         return """Apple Inc.

@@ -85,8 +85,8 @@ EU Total:	233,42 €
 
 
 iTunes K.K.
-〒 163-1480
-3-20-2 Nishi-Shinjuku, Shinjuku-ku, Tokyo
+〒 106-6140
+6-10-1 Roppongi, Minato-ku, Tokyo
 Japan
 
 Sales in Japan (JP)
