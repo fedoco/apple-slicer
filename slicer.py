@@ -67,24 +67,35 @@ def parse_currency_data(filename):
       print 'You can download this file from iTunes Connect\'s "Payments & Financial Reports" page'
       sys.exit(1)
 
-    # skip first three lines of garbage
-    skip = 3
+    line = 0
+    for fields in csv.reader(f, delimiter = ','):
+        line = line + 1
 
-    for line in csv.reader(f, delimiter = ','):
-        skip = skip - 1
-        if skip >= 0 or not len(line) == 12:
+        # make sure it is a valid file by examining the column count of the header in line 3
+        if line == 3:
+            if len(fields) == 11:
+                print 'Aborting: You seem to have downloaded a pending month\'s ' + currency_data_filename
+                print 'Such reports contain estimated figures and should not be used for invoicing'
+                sys.exit(1)
+
+            if len(fields) != 12:
+                print 'Aborting: Invalid column count in ' + currency_data_filename
+                sys.exit(1)
+
+        # skip all lines that don't contain financial data
+        if line < 4 or len(fields) != 12:
             continue
 
         # extract currency symbol from parentheses
-        r = re.search('\(([A-Z]{3})\)$', line[0])
+        r = re.search('\(([A-Z]{3})\)$', fields[0])
         if not r:
-            print 'Aborting: Encountered line without a valid currency symbol'
+            print 'Aborting: Encountered line without a valid currency symbol in ' + currency_data_filename
             sys.exit(1)
         currency = r.group(1)
  
-        exchange_rate = float(line[8].replace(',', ''))
-        amount_pre_tax = float(line[3].replace(',', ''))
-        amount_after_tax = float(line[7].replace(',', ''))
+        exchange_rate = float(fields[8].replace(',', ''))
+        amount_pre_tax = float(fields[3].replace(',', ''))
+        amount_after_tax = float(fields[7].replace(',', ''))
         tax = amount_pre_tax - amount_after_tax
         tax_factor = 1.0 - abs(tax / amount_pre_tax)
 
