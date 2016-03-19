@@ -63,7 +63,7 @@ def parse_currency_data(filename):
     try:
         f = open(filename, 'r')
     except IOError:
-      print 'Exchange rates data file missing: "%s"' % filename + '\n'
+      print 'Exchange rates data file missing: "%s"' % filename
       print 'You can download this file from iTunes Connect\'s "Payments & Financial Reports" page'
       sys.exit(1)
 
@@ -189,8 +189,8 @@ def print_sales_by_corporation(sales, currencies):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print 'Apple Slicer\n'
-        print 'Usage: ' + sys.argv[0] + ' <directory>\n'
+        print 'Apple Slicer'
+        print 'Usage: ' + sys.argv[0] + ' <directory>'
         print 'Directory must contain iTunes Connect financial reports (*.txt) and a file named "' + currency_data_filename + '"'
         print 'which contains matching currency data downloaded from iTunes Connect\'s "Payments & Financial Reports" page'
         sys.exit(1)
