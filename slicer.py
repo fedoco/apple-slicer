@@ -93,11 +93,11 @@ def parse_currency_data(filename):
             sys.exit(1)
         currency = r.group(1)
  
-        exchange_rate = float(fields[8].replace(',', ''))
-        amount_pre_tax = float(fields[3].replace(',', ''))
-        amount_after_tax = float(fields[7].replace(',', ''))
+        exchange_rate = Decimal(fields[8].replace(',', ''))
+        amount_pre_tax = Decimal(fields[3].replace(',', ''))
+        amount_after_tax = Decimal(fields[7].replace(',', ''))
         tax = amount_pre_tax - amount_after_tax
-        tax_factor = 1.0 - abs(tax / amount_pre_tax)
+        tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
 
         d[currency] = exchange_rate, tax_factor
 
