@@ -37,7 +37,7 @@ You can use the output of the script to help genereating *Reverse Charge* invoic
 ## How?
 
 In iTunes Connect go to *Payments & Financial Reports* and download your financial reports of the desired billing month into an appropriately named directory.
-For example, if you want your sales for January, 2016 to be split, download the financial reports for 2016/01 and move the resulting `*0116*.txt` into a directory named `0116`.
+For example, if you want your sales for September, 2014 to be split, download the financial reports for 2014/09 and move the resulting `*0914*.txt` into a directory named `0914`.
 
 Additionally, in order to display revenue in your local currency, the script needs the currency exchange rates and tax withholding amounts that were applicable at the time of the payment.
 They aren't included in the financial report files, but luckily iTunes Connect has them available for you in an extra file which can be downloaded by clicking on the small blue icon right above the *Estimated Earnings* column. 
@@ -46,14 +46,14 @@ Place this file in the same directory as the previously downloaded reports. It s
 You are now ready to execute the script with the reports directory as parameter:
 
 ```sh
-./slicer.py ~/Downloads/iTunesFinancialReports/0116
+./slicer.py ~/Downloads/iTunesFinancialReports/0914
 ```
 ### Example output
 
 The script generates tab-delimited output, more or less ready to be pasted into your favourite billing and/or tax return application.
 
 ```text
-Sales date: 31.12.2015 - 27.01.2016 
+Sales date: 31.08.2014 - 27.09.2014 
 
 iTunes S.à.r.l.
 31-33 rue Sainte Zithe
@@ -72,8 +72,8 @@ Sales in France (FR)
 Sales in Switzerland (CH)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
 	2	 Example App 4	CHF 1,30	0.80030		1,04 €
-	6	 Example App 3	CHF 7,80	0.80030		6,24 €
 	5	 Example App 2	CHF 3,25	0.80030		2,60 €
+	6	 Example App 3	CHF 7,80	0.80030		6,24 €
 	16	 Example App 1	CHF 20,80	0.80030		16,65 €
 
 Sales in Germany (DE)
@@ -81,7 +81,7 @@ Sales in Germany (DE)
 	2	 Example App 6	EUR 24,34	1.00000		24,34 €
 	15	 Example App 5	EUR 158,21	1.00000		158,21 €
 
-EU Total:	233,42 €
+EU Total:	 233,42 €
 
 
 iTunes K.K.
@@ -91,10 +91,10 @@ Japan
 
 Sales in Japan (JP)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
-	1	 Example App 4	JPY 60,00	0.00817		0,39 €
-	1	 Example App 3	JPY 119,00	0.00817		0,77 €
+	1	 Example App 4	JPY 47,60	0.00817		0,39 €
+	1	 Example App 3	JPY 94,40	0.00817		0,77 €
 
-JP Total:	1,16 €
+JP Total:	 1,16 €
 ```
 
 You can configure your local currency (€ in this example) within the script.
