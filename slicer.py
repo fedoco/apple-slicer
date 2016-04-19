@@ -92,6 +92,12 @@ def parse_currency_data(filename):
             print 'Aborting: Encountered line without a valid currency symbol in ' + currency_data_filename
             sys.exit(1)
         currency = r.group(1)
+
+        # special case: if US$ are being parsed for the second time the current line is "Rest of World (USD)" instead of
+        # "Americas (USD)" - unfortunately, we must resort to this method of distinction and rely on the assumption that
+        # lines are always ordered the same because Apple decided to localize the aforementioned strings
+        if currency == 'USD' and currency in d:
+            currency = 'USD - RoW'
  
         exchange_rate = Decimal(fields[8].replace(',', ''))
         amount_pre_tax = Decimal(fields[3].replace(',', ''))
@@ -144,7 +150,7 @@ def parse_financial_reports(workingdir):
             currencies[countrycode] = currency
 
             # special case affecting countries Apple put in the "Rest of World" group: currency for those is listed as "USD"
-            # in the sales reports but the corresponding exchange rate is labelled "USD - RoW" - a pragmatic way of identifying
+            # in the sales reports but the corresponding exchange rate is keyed "USD - RoW" - a pragmatic way of identifying
             # those "RoW" countries is to inspect the filename of the sales report
             if "_WW." in filename and currency == "USD":
               currencies[countrycode] = "USD - RoW"
@@ -189,7 +195,7 @@ def print_sales_by_corporation(sales, currencies):
                     # subtract local tax(es) if applicable in country (f. ex. in JPY)
                     amount -= amount - amount * Decimal(tax_factor)
 
-                print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency, format_currency(amount),
+                print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
                 exchange_rate, format_currency(amount_in_local_currency), local_currency.replace('EUR', '€'))
 
                 corporation_sum += amount_in_local_currency
