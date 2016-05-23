@@ -61,6 +61,11 @@ def parse_currency_data(filename):
     line = 0
     result = {}
 
+    # column indices differ if report has a "Balance" column
+    column_index_exchange_rate = 8
+    column_index_amount_pre_tax = 3
+    column_index_amount_after_tax = 7
+
     try:
         f = open(filename, 'r')
     except IOError:
@@ -71,20 +76,37 @@ def parse_currency_data(filename):
     for fields in csv.reader(f, delimiter = ','):
         line = line + 1
 
-        # make sure it is a valid file by examining the column count of the header in line 3
-        if line == 3:
-            if len(fields) == 11:
+        # make sure it is a valid file by examining the column count of the first line
+        if line == 1:
+            if len(fields) == 10:
                 print 'Aborting: You seem to have downloaded a pending month\'s ' + currency_data_filename
                 print 'Such reports contain estimated figures and should not be used for invoicing'
                 sys.exit(1)
 
-            if len(fields) != 12:
+            if len(fields) != 13:
                 print 'Aborting: Invalid column count in ' + currency_data_filename
                 sys.exit(1)
 
-        # skip all lines that don't contain financial data
-        if line < 4 or len(fields) != 12:
+        # if the report contains earnings that haven't surpassed the origin country's payout threshold, line 3 has a
+        # "Balance" column which makes for shifted column indices
+        if line == 3:
+            if len(fields) == 13:
+                column_index_exchange_rate += 1
+                column_index_amount_pre_tax += 1
+                column_index_amount_after_tax += 1
+
+            if len(fields) != 12 and len(fields) != 13:
+                print 'Aborting: Invalid column count in ' + currency_data_filename
+                sys.exit(1)
+
+        # actual financial data starts at line 4
+        if line < 4:
             continue
+
+        # abort processing at the first blank line: separated by a line with empty fields, reports can contain earnings
+        # which haven't surpassed the payout threshold and therefore need to be ignored
+        if len(fields[0]) == 0:
+            break
 
         # extract currency symbol from parentheses
         r = re.search('\(([A-Z]{3})\)$', fields[0])
@@ -99,9 +121,9 @@ def parse_currency_data(filename):
         if currency == 'USD' and currency in result:
             currency = 'USD - RoW'
  
-        exchange_rate = Decimal(fields[8].replace(',', ''))
-        amount_pre_tax = Decimal(fields[3].replace(',', ''))
-        amount_after_tax = Decimal(fields[7].replace(',', ''))
+        exchange_rate = Decimal(fields[column_index_exchange_rate].replace(',', ''))
+        amount_pre_tax = Decimal(fields[column_index_amount_pre_tax].replace(',', ''))
+        amount_after_tax = Decimal(fields[column_index_amount_after_tax].replace(',', ''))
         tax = amount_pre_tax - amount_after_tax
         tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
 
