@@ -58,16 +58,16 @@ def format_currency(number):
 def parse_currency_data(filename):
     """Parse exchange rate and taxation factor (relevant f. ex. for JPY revenue) for each currency listed in the given file."""
 
-    d = {}
+    line = 0
+    result = {}
 
     try:
         f = open(filename, 'r')
     except IOError:
-      print 'Exchange rates data file missing: "%s"' % filename
-      print 'You can download this file from iTunes Connect\'s "Payments & Financial Reports" page'
-      sys.exit(1)
+        print 'Exchange rates data file missing: "%s"' % filename
+        print 'You can download this file from iTunes Connect\'s "Payments & Financial Reports" page'
+        sys.exit(1)
 
-    line = 0
     for fields in csv.reader(f, delimiter = ','):
         line = line + 1
 
@@ -96,7 +96,7 @@ def parse_currency_data(filename):
         # special case: if US$ are being parsed for the second time the current line is "Rest of World (USD)" instead of
         # "Americas (USD)" - unfortunately, we must resort to this method of distinction and rely on the assumption that
         # lines are always ordered the same because Apple decided to localize the aforementioned strings
-        if currency == 'USD' and currency in d:
+        if currency == 'USD' and currency in result:
             currency = 'USD - RoW'
  
         exchange_rate = Decimal(fields[8].replace(',', ''))
@@ -105,11 +105,11 @@ def parse_currency_data(filename):
         tax = amount_pre_tax - amount_after_tax
         tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
 
-        d[currency] = exchange_rate, tax_factor
+        result[currency] = exchange_rate, tax_factor
 
     f.close()
 
-    return d
+    return result
 
 def parse_financial_reports(workingdir):
     """Parse the sales listed in all iTunes Connect financial reports in the given directory and group them by country and product."""
