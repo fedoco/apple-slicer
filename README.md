@@ -22,11 +22,13 @@ For that reason, your local tax authorities require you to file a periodical *Re
 This is true if your business is based in the EU. In Germany, for example, the required tax document is called *Zusammenfassende Meldung*.
 
 ### Now for the problem
-While due to Apple's internal cash pooling the wire transfer of your App Store proceeds is issued solely by Apple's European subsidiary in Luxembourg, namely iTunes S.à.r.l., the amount transmitted doesn't necessarily consist of European sales only.
+While due to Apple's internal cash pooling the wire transfer of your App Store proceeds is issued solely by Apple's European subsidiary in Ireland, namely Apple Distribution International<sup>*)</sup>, the amount transmitted doesn't necessarily consist of European sales only.
 
-In fact, because iTunes S.à.r.l. also collects revenue of other countries (at the time being f. ex. also Chinese and generally "rest of world" sales), it would therefore be wrong to declare the whole sum paid by iTunes S.à.r.l. in your *Recapitulative Statement*.
+In fact, because Apple Distribution International also collects revenue of other countries (at the time being f. ex. also Chinese and generally "rest of world" sales), it would therefore be wrong to declare the whole sum paid by Apple Distribution International in your *Recapitulative Statement*.
 
-Instead, in order to correctly declare business done between you and Apple, **the sum paid by iTunes S.à.r.l. must be split into revenue made in member states of the European Union and into revenue made in Non-EU countries**.
+Instead, in order to correctly declare business done between you and Apple, **the sum paid by Apple Distribution International must be split into revenue made in member states of the European Union and into revenue made in Non-EU countries**.
+
+<sup>*)</sup> It used to be iTunes S.à.r.l. in Luxembourg until in September 2016 Apple merged it with their Irish subsidiary, Apple Distribution International. Nevertheless, for a transition period until February 5th, 2017 a Luxembourgian branch of the aforementioned Irish company is used.
 
 ### This is where this script comes handy
 It breaks up App Store sales by country and assigns them to the specific Apple subsidiary which is legally accountable for them - for example,  *Apple Canada, Inc.* for Canadian or *iTunes K.K.* for Japanese sales.
@@ -55,11 +57,11 @@ The script generates tab-delimited output, more or less ready to be pasted into 
 ```text
 Sales date: 31.08.2014 - 27.09.2014 
 
-iTunes S.à.r.l.
+Apple Distribution International, Luxembourg Branch
 31-33 rue Sainte Zithe
 2763 Luxembourg
 Luxembourg
-VAT ID: LU20165772
+VAT ID: LU25094756
 
 Sales in Finland (FI)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
