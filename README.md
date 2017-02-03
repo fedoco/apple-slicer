@@ -28,7 +28,7 @@ In fact, because Apple Distribution International also collects revenue of other
 
 Instead, in order to correctly declare business done between you and Apple, **the sum paid by Apple Distribution International must be split into revenue made in member states of the European Union and into revenue made in Non-EU countries**.
 
-<sup>*)</sup> It used to be iTunes S.à.r.l. in Luxembourg until in September 2016 Apple merged it with their Irish subsidiary, Apple Distribution International. Nevertheless, for a transition period until February 5th, 2017 a Luxembourgian branch of the aforementioned Irish company is used.
+<sup>*)</sup> It used to be iTunes S.à.r.l. in Luxembourg until February 5th, 2017 when Apple merged it with their Irish subsidiary, Apple Distribution International.
 
 ### This is where this script comes handy
 It breaks up App Store sales by country and assigns them to the specific Apple subsidiary which is legally accountable for them - for example,  *Apple Canada, Inc.* for Canadian or *iTunes K.K.* for Japanese sales.
@@ -57,11 +57,12 @@ The script generates tab-delimited output, more or less ready to be pasted into 
 ```text
 Sales date: 31.08.2014 - 27.09.2014 
 
-Apple Distribution International, Luxembourg Branch
-31-33 rue Sainte Zithe
-2763 Luxembourg
-Luxembourg
-VAT ID: LU25094756
+Apple Distribution International
+Internet Software & Services
+Hollyhill Industrial Estate
+Hollyhill, Cork
+Republic of Ireland
+VAT ID: IE9700053D
 
 Sales in Finland (FI)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR

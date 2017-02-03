@@ -227,11 +227,12 @@ Australia"""
 Toronto, ON M5J 0A8
 Canada"""
     elif corporation == 'EU':
-        return """Apple Distribution International, Luxembourg Branch
-31-33 rue Sainte Zithe
-2763 Luxembourg
-Luxembourg
-VAT ID: LU25094756"""
+        return """Apple Distribution International
+Internet Software & Services
+Hollyhill Industrial Estate
+Hollyhill, Cork
+Republic of Ireland
+VAT ID: IE9700053D"""
     elif corporation == 'JP':
         return """iTunes K.K.
 〒 106-6140
