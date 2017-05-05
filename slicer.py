@@ -115,11 +115,15 @@ def parse_currency_data(filename):
             sys.exit(1)
         currency = r.group(1)
 
-        # special case: if US$ are being parsed for the second time the current line is "Rest of World (USD)" instead of
-        # "Americas (USD)" - unfortunately, we must resort to this method of distinction and rely on the assumption that
-        # lines are always ordered the same because Apple decided to localize the aforementioned strings
-        if currency == 'USD' and currency in result:
-            currency = 'USD - RoW'
+        # USD can occur twice in the file: We must take special care to distinguish between USD (and their corresponding
+        # exchange rate) for purchases made in "Americas" and in "Rest of World", as Apple calls it. Unfortunately, Apple
+        # decided to localize the aforementioned strings so they need to be looked up in a translation table. Luckily,
+        # localized report files currently seem to be generated only for French, German, Italian and Spanish locale settings.
+        localizations_RoW = ["of World", "du monde", "der Welt", "del mondo", "del mundo"]
+        if currency == 'USD':
+            for localization in localizations_RoW:
+                if localization.lower() in fields[0].lower():
+                    currency = 'USD - RoW'
  
         exchange_rate = Decimal(fields[column_index_exchange_rate].replace(',', ''))
         amount_pre_tax = Decimal(fields[column_index_amount_pre_tax].replace(',', ''))
