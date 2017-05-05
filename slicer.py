@@ -238,8 +238,8 @@ def print_sales_by_corporation(sales, currencies, print_subtotals = True):
             # although of course rounding happens here, too, it won't show because Apple converts currencies in the same per country manner
             country_sum_in_local_currency = country_sum * exchange_rate
 
-            if print_subtotals: print '\n\t\tSubtotal:\t{0} {1}\t{2}\t{3} {4}'.format(country_currency[:3], format_currency(country_sum),
-            exchange_rate, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
+            if print_subtotals: print '\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
+            format_currency(country_sum), exchange_rate, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
 
             corporation_sum += country_sum_in_local_currency
 

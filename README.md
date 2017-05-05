@@ -68,13 +68,13 @@ Sales in Finland (FI)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
 	1	 Example App 5	EUR 12,17	1.00000		12,1700 €
 
-		 Subtotal:	EUR 12,17	1.00000		12,17 €
+		 Subtotal FI:	EUR 12,17	1.00000		12,17 €
 
 Sales in France (FR)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
 	1	 Example App 5	EUR 12,17	1.00000		12,1700 €
 
-		 Subtotal:	EUR 12,17	1.00000		12,17 €
+		 Subtotal FR:	EUR 12,17	1.00000		12,17 €
 
 Sales in Switzerland (CH)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
@@ -83,14 +83,14 @@ Sales in Switzerland (CH)
 	6	 Example App 3	CHF 7,80	0.80030		6,2423 €
 	16	 Example App 1	CHF 20,80	0.80030		16,6462 €
 
-		 Subtotal:	CHF 33,15	0.80030		26,53 €
+		 Subtotal CH:	CHF 33,15	0.80030		26,53 €
 
 Sales in Germany (DE)
 	Quantity Product	Amount		Exchange Rate	Amount in EUR
 	2	 Example App 6	EUR 24,34	1.00000		24,3400 €
 	15	 Example App 5	EUR 158,21	1.00000		158,2100 €
 
-		 Subtotal:	EUR 182,55	1.00000		182,55 €
+		 Subtotal DE:	EUR 182,55	1.00000		182,55 €
 
 EU Total:	 233,42 €
 
@@ -105,7 +105,7 @@ Sales in Japan (JP)
 	1	 Example App 4	JPY 47,60	0.00817		0,3889 €
 	1	 Example App 3	JPY 94,40	0.00817		0,7712 €
 
-		 Subtotal:	JPY 142,00	0.00817		1,16 €
+		 Subtotal JP:	JPY 142,00	0.00817		1,16 €
 
 JP Total:	 1,16 €
 ```
