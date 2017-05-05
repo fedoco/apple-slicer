@@ -163,7 +163,7 @@ def parse_financial_reports(workingdir):
 
             # consider first occurrence the authoritative date range and assume it is the same for all reports
             if not date_range:
-                date_range = format_date(line[0]) + ' - ' + format_date(line[1])
+                date_range = format_date(line[0]) + ' – ' + format_date(line[1])
 
             # all fields of interest of the current line
             quantity = int(line[5])
@@ -196,7 +196,7 @@ def parse_financial_reports(workingdir):
 
     return countries, currencies, date_range 
 
-def print_sales_by_corporation(sales, currencies, print_subtotals = True):
+def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
     """Print sales grouped by Apple subsidiaries, by countries in which the sales have been made and by products sold."""
 
     corporations = {}
@@ -232,13 +232,14 @@ def print_sales_by_corporation(sales, currencies, print_subtotals = True):
                 # digits in order to convey that probably some rounding took place
                 amount_in_local_currency = amount * exchange_rate
 
-                print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
+                if not only_subtotals: print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
                 exchange_rate, format_currency(amount_in_local_currency, True), local_currency.replace('EUR', '€'))
+                else: print '\t{0}\t{1}\t{2} {3}'.format(quantity, product, country_currency[:3], format_currency(amount))
 
             # although of course rounding happens here, too, it won't show because Apple converts currencies in the same per country manner
             country_sum_in_local_currency = country_sum * exchange_rate
 
-            if print_subtotals: print '\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
+            if not no_subtotals: print '\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
             format_currency(country_sum), exchange_rate, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
 
             corporation_sum += country_sum_in_local_currency
@@ -248,11 +249,13 @@ def print_sales_by_corporation(sales, currencies, print_subtotals = True):
 # -------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Tool for splitting iTunes Connect financial reports by Apple legal entities")
+    parser = argparse.ArgumentParser(description='Tool for splitting iTunes Connect financial reports by Apple legal entities')
 
-    parser.add_argument('--no-subtotals', action="store_false", help="omit output of subtotal for each country")
-    parser.add_argument('directory', help="path to directory that contains iTunes Connect financial reports (*.txt) and a file named " + 
-    "\"financial_report.csv\" which contains matching currency data downloaded from iTunes Connect's \"Payments & Financial Reports\" page")
+    subtotals_group = parser.add_mutually_exclusive_group(required=False)
+    subtotals_group.add_argument('--no-subtotals', action='store_true', help='omit printing of subtotal for each country')
+    subtotals_group.add_argument('--only-subtotals', action='store_true', help='only print subtotal for each country (i.e. skip per product Euro conversion)')
+    parser.add_argument('directory', help='path to directory that contains iTunes Connect financial reports (*.txt) and a file named ' + 
+    '"financial_report.csv" which contains matching currency data downloaded from iTunes Connect\'s "Payments & Financial Reports" page')
 
     args = parser.parse_args()
 
@@ -262,6 +265,6 @@ if __name__ == '__main__':
 
     print 'Sales date: ' + date_range,
 
-    print_sales_by_corporation(sales, currencies, args.no_subtotals)
+    print_sales_by_corporation(sales, currencies, args.no_subtotals, args.only_subtotals)
 
     sys.exit(0)
