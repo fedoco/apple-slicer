@@ -51,9 +51,15 @@ def format_date(date_str):
     """Formats an US-style date string according to the default format of the current locale."""
     return datetime.strptime(date_str,"%m/%d/%Y").strftime('%x')
 
-def format_currency(number):
+def format_currency(number, precise = False):
     """Format a number according to the currency format of the current locale but without the currency symbol.""" 
-    return locale.currency(number, False, True)
+    if not precise:
+        # round according to the current locale's currency format (fractional digits, thousands grouping and decimal mark)
+        return locale.currency(number, False, True)
+    else:
+        # while still obeying to the current locale's currency format regarding thousands grouping and decimal mark,
+        # always round to 4 decimal places
+        return locale.format("%.4f", number, True, True)
 
 def parse_currency_data(filename):
     """Parse exchange rate and taxation factor (relevant f. ex. for JPY revenue) for each currency listed in the given file."""
@@ -203,28 +209,39 @@ def print_sales_by_corporation(sales, currencies):
         print '\n\n' + apple.address(corporation)
 
         for countrycode in corporations[corporation]:
+            country_sum = Decimal(0)
             country_currency = currencies[countrycode]
             products_sold = corporations[corporation][countrycode]
 
             print '\nSales in {0} ({1})'.format(apple.countryname(countrycode), countrycode)
             print '\tQuantity\tProduct\tAmount\tExchange Rate\tAmount in ' + local_currency
 
+            exchange_rate = tax_factor = Decimal('1.00000')
+            if not country_currency == local_currency:
+                exchange_rate, tax_factor = currency_data[country_currency]
+
             for product in products_sold:
-                exchange_rate = Decimal('1.00000')
                 quantity, amount = products_sold[product]
-                amount_in_local_currency = amount
 
-                if not country_currency == local_currency:
-                    exchange_rate, tax_factor = currency_data[country_currency]
-                    amount_in_local_currency = amount * Decimal(exchange_rate) * Decimal(tax_factor)
+                # subtract local tax(es) if applicable in country (f. ex. in JPY)
+                amount -= amount - amount * tax_factor
 
-                    # subtract local tax(es) if applicable in country (f. ex. in JPY)
-                    amount -= amount - amount * Decimal(tax_factor)
+                country_sum += amount
+
+                # because of rounding errors, the per product amount can only serve as an informative estimate and is thus displayed with 4 fractional
+                # digits in order to convey that probably some rounding took place
+                amount_in_local_currency = amount * exchange_rate
 
                 print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
-                exchange_rate, format_currency(amount_in_local_currency), local_currency.replace('EUR', '€'))
+                exchange_rate, format_currency(amount_in_local_currency, True), local_currency.replace('EUR', '€'))
 
-                corporation_sum += amount_in_local_currency
+            # although of course rounding happens here, too, it won't show because Apple converts currencies in the same per country manner
+            country_sum_in_local_currency = country_sum * exchange_rate
+
+            print '\n\t\tSubtotal:\t{0} {1}\t{2}\t{3} {4}'.format(country_currency[:3], format_currency(country_sum), exchange_rate,
+            format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
+
+            corporation_sum += country_sum_in_local_currency
 
         print '\n{0} Total:\t{1} {2}'.format(corporation, format_currency(corporation_sum), local_currency.replace('EUR', '€'))
 
