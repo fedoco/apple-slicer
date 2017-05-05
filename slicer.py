@@ -28,7 +28,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import sys, os, re, csv, locale
+import sys, os, re, csv, locale, argparse
 import apple
 from decimal import Decimal
 from datetime import datetime
@@ -196,7 +196,7 @@ def parse_financial_reports(workingdir):
 
     return countries, currencies, date_range 
 
-def print_sales_by_corporation(sales, currencies):
+def print_sales_by_corporation(sales, currencies, print_subtotals = True):
     """Print sales grouped by Apple subsidiaries, by countries in which the sales have been made and by products sold."""
 
     corporations = {}
@@ -238,8 +238,8 @@ def print_sales_by_corporation(sales, currencies):
             # although of course rounding happens here, too, it won't show because Apple converts currencies in the same per country manner
             country_sum_in_local_currency = country_sum * exchange_rate
 
-            print '\n\t\tSubtotal:\t{0} {1}\t{2}\t{3} {4}'.format(country_currency[:3], format_currency(country_sum), exchange_rate,
-            format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
+            if print_subtotals: print '\n\t\tSubtotal:\t{0} {1}\t{2}\t{3} {4}'.format(country_currency[:3], format_currency(country_sum),
+            exchange_rate, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
 
             corporation_sum += country_sum_in_local_currency
 
@@ -248,21 +248,20 @@ def print_sales_by_corporation(sales, currencies):
 # -------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print 'Apple Slicer'
-        print 'Usage: ' + sys.argv[0] + ' <directory>'
-        print 'Directory must contain iTunes Connect financial reports (*.txt) and a file named "' + currency_data_filename + '"'
-        print 'which contains matching currency data downloaded from iTunes Connect\'s "Payments & Financial Reports" page'
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Tool for splitting iTunes Connect financial reports by Apple legal entities")
 
-    workingdir = sys.argv[1]
+    parser.add_argument('--no-subtotals', action="store_false", help="omit output of subtotal for each country")
+    parser.add_argument('directory', help="path to directory that contains iTunes Connect financial reports (*.txt) and a file named " + 
+    "\"financial_report.csv\" which contains matching currency data downloaded from iTunes Connect's \"Payments & Financial Reports\" page")
 
-    currency_data = parse_currency_data(workingdir + '/' + currency_data_filename)
+    args = parser.parse_args()
 
-    sales, currencies, date_range = parse_financial_reports(workingdir)
+    currency_data = parse_currency_data(args.directory + '/' + currency_data_filename)
+
+    sales, currencies, date_range = parse_financial_reports(args.directory)
 
     print 'Sales date: ' + date_range,
 
-    print_sales_by_corporation(sales, currencies)
+    print_sales_by_corporation(sales, currencies, args.no_subtotals)
 
     sys.exit(0)
