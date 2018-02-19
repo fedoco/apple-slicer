@@ -240,7 +240,7 @@ VAT ID: IE9700053D"""
 Japan"""
     elif corporation == 'US':
         return """Apple Inc.
-1 Infinite Loop
+1 Apple Park Way
 Cupertino, CA 95014
 U.S.A."""
     raise LookupError('Unknown Apple corporation "%s"' % corporation)
