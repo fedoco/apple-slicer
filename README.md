@@ -1,7 +1,7 @@
 # Apple Slicer
 
 ## What?
-This script **parses iTunes Connect financial reports** and **splits sales by Apple subsidiaries** which are legally accountable for them.
+This script **parses App Store Connect financial reports** and **splits sales by Apple subsidiaries** which are legally accountable for them.
 It may be used to help generating *Reverse Charge* invoices for accounting and in order to correctly issue *Recapitulative Statements* mandatory in the EU.
 
 ## Why?
@@ -11,7 +11,7 @@ You happily generate revenue with your apps on the App Store and Apple dutifully
 
 ### In reality, though, ...
 ...you have to remit taxes for your App Store sales of course. For that reason, tax authorities require some sort of receipt for your income from App Store sales.
-But will they accept the iTunes Connect Financial Reports? Or your bank statements?
+But will they accept the App Store Connect (formerly iTunes Connect) Financial Reports? Or your bank statements?
 
 Most probably they won't. This is why you need to generate receipts by invoicing Apple using the *Reverse Charge* procedure. Well, in bureaucratic Germany, at least.
 
@@ -38,11 +38,11 @@ You can use the output of the script to help genereating *Reverse Charge* invoic
 
 ## How?
 
-In iTunes Connect go to *Payments & Financial Reports* and download your financial reports of the desired billing month into an appropriately named directory.
+In App Store Connect go to *Payments & Financial Reports* and download your financial reports of the desired billing month into an appropriately named directory.
 For example, if you want your sales for September, 2014 to be split, download the financial reports for 2014/09 and move the resulting `*0914*.txt` into a directory named `0914`.
 
 Additionally, in order to display revenue in your local currency, the script needs the currency exchange rates and tax withholding amounts that were applicable at the time of the payment.
-They aren't included in the financial report files, but luckily iTunes Connect has them available for you in an extra file which can be downloaded by clicking on the small blue icon right above the *Estimated Earnings* column. 
+They aren't included in the financial report files, but luckily App Store Connect has them available for you in an extra file which can be downloaded by clicking on the small blue icon right above the *Estimated Earnings* column. 
 Place this file in the same directory as the previously downloaded reports. It should be named `financial_report.csv`.
 
 You are now ready to execute the script with the reports directory as parameter:

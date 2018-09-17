@@ -3,7 +3,7 @@
 
 # Apple Slicer
 #
-# This script parses iTunes Connect financial reports and splits sales
+# This script parses App Store Connect financial reports and splits sales
 # by Apple subsidiaries which are legally accountable for them.
 # It may be used to help generating Reverse Charge invoices for accounting and
 # in order to correctly issue Recapitulative Statements mandatory in the EU.
@@ -41,7 +41,7 @@ local_currency = 'EUR'
 # desired locale used for formatting dates and prices
 locale.setlocale(locale.LC_ALL, 'de_DE')
 
-# name of CSV file in which currency exchange rates are listed - can be downloaded from iTunes Connect's
+# name of CSV file in which currency exchange rates are listed - can be downloaded from App Store Connect's
 # "Payments & Financial Reports" page and needs to match the financial reports' date range
 currency_data_filename = 'financial_report.csv'
 
@@ -76,7 +76,7 @@ def parse_currency_data(filename):
         f = open(filename, 'r')
     except IOError:
         print 'Exchange rates data file missing: "%s"' % filename
-        print 'You can download this file from iTunes Connect\'s "Payments & Financial Reports" page'
+        print 'You can download this file from App Store Connect\'s "Payments & Financial Reports" page'
         sys.exit(1)
 
     for fields in csv.reader(f, delimiter = ','):
@@ -144,7 +144,7 @@ def parse_currency_data(filename):
     return result
 
 def parse_financial_reports(workingdir):
-    """Parse the sales listed in all iTunes Connect financial reports in the given directory and group them by country and product."""
+    """Parse the sales listed in all App Store Connect financial reports in the given directory and group them by country and product."""
 
     countries = {}
     currencies = {}
@@ -191,7 +191,7 @@ def parse_financial_reports(workingdir):
 
     # break if we didn't read any meaningful data
     if not countries:
-      print 'No valid iTunes Connect financial reports (*.txt) found in ' + workingdir
+      print 'No valid App Store Connect financial reports (*.txt) found in ' + workingdir
       sys.exit(1)
 
     return countries, currencies, date_range 
@@ -249,13 +249,13 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
 # -------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Tool for splitting iTunes Connect financial reports by Apple legal entities')
+    parser = argparse.ArgumentParser(description='Tool for splitting App Store Connect financial reports by Apple legal entities')
 
     subtotals_group = parser.add_mutually_exclusive_group(required=False)
     subtotals_group.add_argument('--no-subtotals', action='store_true', help='omit printing of subtotal for each country')
     subtotals_group.add_argument('--only-subtotals', action='store_true', help='only print subtotal for each country (i.e. skip per product Euro conversion)')
-    parser.add_argument('directory', help='path to directory that contains iTunes Connect financial reports (*.txt) and a file named ' + 
-    '"financial_report.csv" which contains matching currency data downloaded from iTunes Connect\'s "Payments & Financial Reports" page')
+    parser.add_argument('directory', help='path to directory that contains App Store Connect financial reports (*.txt) and a file named ' + 
+    '"financial_report.csv" which contains matching currency data downloaded from App Store Connect\'s "Payments & Financial Reports" page')
 
     args = parser.parse_args()
 
