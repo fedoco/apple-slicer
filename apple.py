@@ -217,9 +217,9 @@ def address(corporation):
     """Get billing address of Apple subsidiary with given handle"""
     if corporation == 'AU':
         return """Apple Pty Limited
-Level 13, Capital Centre
-255 Pitt Street
-Sydney South NSW 2000
+Level 3
+20 Martin Place
+Sydney South 2000
 Australia"""
     elif corporation == 'CA':
         return """Apple Canada Inc.
