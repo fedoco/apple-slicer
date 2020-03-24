@@ -23,7 +23,7 @@
 # THE SOFTWARE.
 
 # List of countries handled by Apple USA and each of Apple's (currently four) foreign subsidiaries.
-# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / Mac OS X Paid Applications" contract as effecive of January, 2015.
+# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effecive of April, 2020.
 
 australia = {
 'AU': 'Australia',
@@ -35,6 +35,7 @@ canada = {
 }
 
 europe = {
+'AF': 'Afghanistan',
 'AL': 'Albania',
 'DZ': 'Algeria',
 'AO': 'Angola',
@@ -46,15 +47,19 @@ europe = {
 'BE': 'Belgium',
 'BJ': 'Benin',
 'BT': 'Bhutan',
+'BA': 'Bosnia and Herzegovina',
 'BW': 'Botswana',
 'BN': 'Brunei',
 'BG': 'Bulgaria',
 'BF': 'Burkina-Faso',
 'KH': 'Cambodia',
+'CM': 'Cameroon',
 'CV': 'Cape Verde',
 'TD': 'Chad',
 'CN': 'China',
-'CD': 'Republic of Congo',
+'CD': 'Democratic Republic of Congo',
+'CG': 'Republic of Congo',
+'CI': 'Cote d’Ivoire',
 'HR': 'Croatia',
 'CY': 'Cyprus',
 'CZ': 'Czech Republic',
@@ -64,7 +69,9 @@ europe = {
 'FJ': 'Fiji',
 'FI': 'Finland',
 'FR': 'France',
+'GA': 'Gabon',
 'GM': 'Gambia',
+'GE': 'Georgia',
 'DE': 'Germany',
 'GH': 'Ghana',
 'GR': 'Greece',
@@ -74,6 +81,7 @@ europe = {
 'IS': 'Iceland',
 'IN': 'India',
 'ID': 'Indonesia',
+'IQ': 'Iraq',
 'IE': 'Ireland',
 'IL': 'Israel',
 'IT': 'Italy',
@@ -81,12 +89,14 @@ europe = {
 'KZ': 'Kazakhstan',
 'KE': 'Kenya',
 'KR': 'Korea',
+'XK': 'Kosovo',
 'KW': 'Kuwait',
 'KG': 'Kyrgyzstan',
 'LA': 'Laos',
 'LV': 'Latvia',
 'LB': 'Lebanon',
 'LR': 'Liberia',
+'LY': 'Libya',
 'LT': 'Lithuania',
 'LU': 'Luxembourg',
 'MO': 'Macao',
@@ -94,6 +104,7 @@ europe = {
 'MG': 'Madagascar',
 'MW': 'Malawi',
 'MY': 'Malaysia',
+'MV': 'Maldives',
 'ML': 'Mali',
 'MT': 'Republic of Malta',
 'MR': 'Mauritania',
@@ -101,8 +112,12 @@ europe = {
 'FM': 'Federal States of Micronesia',
 'MD': 'Moldova',
 'MN': 'Mongolia',
+'ME': 'Montenegro',
+'MA': 'Morocco',
 'MZ': 'Mozambique',
+'MM': 'Myanmar',
 'NA': 'Namibia',
+'NR': 'Nauru',
 'NP': 'Nepal',
 'NL': 'Netherlands',
 'NE': 'Niger',
@@ -118,9 +133,11 @@ europe = {
 'QA': 'Qatar',
 'RO': 'Romania',
 'RU': 'Russia',
+'RW': 'Rwanda',
 'ST': 'Sao Tome e Principe',
 'SA': 'Saudi Arabia',
 'SN': 'Senegal',
+'RS': 'Serbia',
 'SC': 'Seychelles',
 'SL': 'Sierra Leone',
 'SG': 'Singapore',
@@ -137,6 +154,7 @@ europe = {
 'TJ': 'Tajikistan',
 'TZ': 'Tanzania',
 'TH': 'Thailand',
+'TO': 'Tonga',
 'TN': 'Tunisia',
 'TR': 'Turkey',
 'TM': 'Turkmenistan',
@@ -145,8 +163,10 @@ europe = {
 'UA': 'Ukraine',
 'GB': 'United Kingdom',
 'UZ': 'Uzbekistan',
+'VU': 'Vanuatu',
 'VN': 'Vietnam',
 'YE': 'Yemen',
+'ZM': 'Zambia',
 'ZW': 'Zimbabwe'
 }
 
