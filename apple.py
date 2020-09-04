@@ -22,8 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# List of countries handled by Apple USA and each of Apple's (currently four) foreign subsidiaries.
-# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effecive of April, 2020.
+# List of countries handled by Apple Inc. and each of Apple's (currently five) foreign subsidiaries.
+# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effecive of August, 2020.
 
 australia = {
 'AU': 'Australia',
@@ -174,10 +174,10 @@ japan = {
 'JP': 'Japan'
 }
 
-us = {
-'AR': 'Argentinia',
+latam = {
 'AI': 'Anguilla',
 'AG': 'Antigua & Barbuda',
+'AR': 'Argentinia',
 'BS': 'Bahamas',
 'BB': 'Barbados',
 'BZ': 'Belize',
@@ -211,11 +211,14 @@ us = {
 'TT': 'Trinidad & Tobago',
 'TC': 'Turks & Caicos',
 'UY': 'Uruguay',
-'VE': 'Venezuela',
+'VE': 'Venezuela'
+}
+
+us = {
 'US': 'United States'
 }
 
-corporations = [australia, canada, europe, japan, us]
+corporations = [australia, canada, europe, japan, latam, us]
 
 def corporation(cc):
     """Get Apple subsidiary handling sales of the given country"""
@@ -223,6 +226,7 @@ def corporation(cc):
     if cc in canada: return 'CA'
     if cc in europe: return 'EU'
     if cc in japan: return 'JP'
+    if cc in latam: return 'LL'
     if cc in us: return 'US'
     raise LookupError('Unknown country code "%s"' % cc)
 
@@ -258,6 +262,11 @@ VAT ID: IE9700053D"""
 〒 106-6140
 6-10-1 Roppongi, Minato-ku, Tokyo
 Japan"""
+    elif corporation == 'LL':
+        return """Apple Services LATAM LLC
+1 Apple Park Way, MS 169-5CL,
+Cupertino, CA 95014
+U.S.A."""
     elif corporation == 'US':
         return """Apple Inc.
 1 Apple Park Way
