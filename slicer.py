@@ -68,9 +68,9 @@ def parse_currency_data(filename):
     result = {}
 
     # column indices differ if report has a "Balance" column
-    column_index_exchange_rate = 8
     column_index_amount_pre_tax = 3
     column_index_amount_after_tax = 7
+    column_index_earnings = 9
 
     try:
         f = open(filename, 'r')
@@ -97,9 +97,9 @@ def parse_currency_data(filename):
         # "Balance" column which makes for shifted column indices
         if line == 3:
             if len(fields) == 13:
-                column_index_exchange_rate += 1
                 column_index_amount_pre_tax += 1
                 column_index_amount_after_tax += 1
+                column_index_earnings += 1
 
             if len(fields) != 12 and len(fields) != 13:
                 print 'Aborting: Invalid column count in ' + currency_data_filename
@@ -131,9 +131,11 @@ def parse_currency_data(filename):
                 if localization.lower() in fields[0].lower():
                     currency = 'USD - RoW'
  
-        exchange_rate = Decimal(fields[column_index_exchange_rate].replace(',', ''))
         amount_pre_tax = Decimal(fields[column_index_amount_pre_tax].replace(',', ''))
         amount_after_tax = Decimal(fields[column_index_amount_after_tax].replace(',', ''))
+        earnings = Decimal(fields[column_index_earnings].replace(',', ''))
+        exchange_rate = earnings/amount_pre_tax        
+
         tax = amount_pre_tax - amount_after_tax
         tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
 
