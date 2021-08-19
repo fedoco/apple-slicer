@@ -245,7 +245,7 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
             country_sum_in_local_currency = country_sum * exchange_rate
 
             if not no_subtotals: print '\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
-            format_currency(country_sum), exchange_rate, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
+            format_currency(country_sum), round(exchange_rate, 6), format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
 
             corporation_sum += country_sum_in_local_currency
 
