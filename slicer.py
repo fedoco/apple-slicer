@@ -133,10 +133,11 @@ def parse_currency_data(filename):
  
         amount_pre_tax = Decimal(fields[column_index_amount_pre_tax].replace(',', ''))
         amount_after_tax = Decimal(fields[column_index_amount_after_tax].replace(',', ''))
+        earnings = Decimal(fields[column_index_earnings].replace(',', ''))
+
         # calculate the exchange rate explicitly instead of relying on the "Exchange Rate“ column
         # because its value is rounded to 6 decimal places and sometimes not precise enough
-        earnings = Decimal(fields[column_index_earnings].replace(',', ''))
-        exchange_rate = earnings/amount_pre_tax        
+        exchange_rate = earnings / amount_after_tax 
 
         tax = amount_pre_tax - amount_after_tax
         tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
