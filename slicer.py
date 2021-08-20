@@ -224,7 +224,7 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
             exchange_rate = tax_factor = Decimal('1.00000')
             if not country_currency == local_currency:
                 exchange_rate, tax_factor = currency_data[country_currency]
-            exchange_rate_rounded = round(exchange_rate, 5)
+            exchange_rate_formatted = locale.format("%.5f", exchange_rate)
 
             for product in products_sold:
                 quantity, amount = products_sold[product]
@@ -239,14 +239,14 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
                 amount_in_local_currency = amount * exchange_rate
 
                 if not only_subtotals: print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
-                exchange_rate_rounded, format_currency(amount_in_local_currency, True), local_currency.replace('EUR', '€'))
+                exchange_rate_formatted, format_currency(amount_in_local_currency, True), local_currency.replace('EUR', '€'))
                 else: print '\t{0}\t{1}\t{2} {3}'.format(quantity, product, country_currency[:3], format_currency(amount))
 
             # although of course rounding happens here, too, it won't show because Apple converts currencies in the same per country manner
             country_sum_in_local_currency = country_sum * exchange_rate
 
             if not no_subtotals: print '\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
-            format_currency(country_sum), exchange_rate_rounded, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
+            format_currency(country_sum), exchange_rate_formatted, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
 
             corporation_sum += country_sum_in_local_currency
 
