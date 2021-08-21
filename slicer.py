@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Apple Slicer
@@ -59,7 +59,7 @@ def format_currency(number, precise = False):
     else:
         # while still obeying to the current locale's currency format regarding thousands grouping and decimal mark,
         # always round to 4 decimal places
-        return locale.format("%.4f", number, True, True)
+        return locale.format_string("%.4f", number, True, True)
 
 def parse_currency_data(filename):
     """Parse exchange rate and taxation factor (relevant f. ex. for JPY revenue) for each currency listed in the given file."""
@@ -75,8 +75,8 @@ def parse_currency_data(filename):
     try:
         f = open(filename, 'r')
     except IOError:
-        print 'Exchange rates data file missing: "%s"' % filename
-        print 'You can download this file from App Store Connect\'s "Payments & Financial Reports" page'
+        print('Exchange rates data file missing: "%s"' % filename)
+        print('You can download this file from App Store Connect\'s "Payments & Financial Reports" page')
         sys.exit(1)
 
     for fields in csv.reader(f, delimiter = ','):
@@ -85,12 +85,12 @@ def parse_currency_data(filename):
         # make sure it is a valid file by examining the column count of the first line
         if line == 1:
             if len(fields) == 10:
-                print 'Aborting: You seem to have downloaded a pending month\'s ' + currency_data_filename
-                print 'Such reports contain estimated figures and should not be used for invoicing'
+                print('Aborting: You seem to have downloaded a pending month\'s ' + currency_data_filename)
+                print('Such reports contain estimated figures and should not be used for invoicing')
                 sys.exit(1)
 
             if len(fields) != 13:
-                print 'Aborting: Invalid column count in ' + currency_data_filename
+                print('Aborting: Invalid column count in ' + currency_data_filename)
                 sys.exit(1)
 
         # if the report contains earnings that haven't surpassed the origin country's payout threshold, line 3 has a
@@ -102,7 +102,7 @@ def parse_currency_data(filename):
                 column_index_earnings += 1
 
             if len(fields) != 12 and len(fields) != 13:
-                print 'Aborting: Invalid column count in ' + currency_data_filename
+                print('Aborting: Invalid column count in ' + currency_data_filename)
                 sys.exit(1)
 
         # actual financial data starts at line 4
@@ -117,7 +117,7 @@ def parse_currency_data(filename):
         # extract currency symbol from parentheses
         r = re.search('\(([A-Z]{3})\)$', fields[0])
         if not r:
-            print 'Aborting: Encountered line without a valid currency symbol in ' + currency_data_filename
+            print('Aborting: Encountered line without a valid currency symbol in ' + currency_data_filename)
             sys.exit(1)
         currency = r.group(1)
 
@@ -196,7 +196,7 @@ def parse_financial_reports(workingdir):
 
     # break if we didn't read any meaningful data
     if not countries:
-      print 'No valid App Store Connect financial reports (*.txt) found in ' + workingdir
+      print('No valid App Store Connect financial reports (*.txt) found in ' + workingdir)
       sys.exit(1)
 
     return countries, currencies, date_range 
@@ -211,20 +211,20 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
 
     for corporation in corporations:
         corporation_sum = Decimal(0)
-        print '\n\n' + apple.address(corporation)
+        print('\n\n' + apple.address(corporation))
 
         for countrycode in corporations[corporation]:
             country_sum = Decimal(0)
             country_currency = currencies[countrycode]
             products_sold = corporations[corporation][countrycode]
 
-            print '\nSales in {0} ({1})'.format(apple.countryname(countrycode), countrycode)
-            print '\tQuantity\tProduct\tAmount\tExchange Rate\tAmount in ' + local_currency
+            print('\nSales in {0} ({1})'.format(apple.countryname(countrycode), countrycode))
+            print('\tQuantity\tProduct\tAmount\tExchange Rate\tAmount in ' + local_currency)
 
             exchange_rate = tax_factor = Decimal('1.00000')
             if not country_currency == local_currency:
                 exchange_rate, tax_factor = currency_data[country_currency]
-            exchange_rate_formatted = locale.format("%.5f", exchange_rate)
+            exchange_rate_formatted = locale.format_string("%.5f", exchange_rate)
 
             for product in products_sold:
                 quantity, amount = products_sold[product]
@@ -238,19 +238,19 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
                 # digits in order to convey that probably some rounding took place
                 amount_in_local_currency = amount * exchange_rate
 
-                if not only_subtotals: print '\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
-                exchange_rate_formatted, format_currency(amount_in_local_currency, True), local_currency.replace('EUR', '€'))
-                else: print '\t{0}\t{1}\t{2} {3}'.format(quantity, product, country_currency[:3], format_currency(amount))
+                if not only_subtotals: print('\t{0}\t{1}\t{2} {3}\t{4}\t{5} {6}'.format(quantity, product, country_currency[:3], format_currency(amount),
+                exchange_rate_formatted, format_currency(amount_in_local_currency, True), local_currency.replace('EUR', '€')))
+                else: print('\t{0}\t{1}\t{2} {3}'.format(quantity, product, country_currency[:3], format_currency(amount)))
 
             # although of course rounding happens here, too, it won't show because Apple converts currencies in the same per country manner
             country_sum_in_local_currency = country_sum * exchange_rate
 
-            if not no_subtotals: print '\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
-            format_currency(country_sum), exchange_rate_formatted, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€'))
+            if not no_subtotals: print('\n\t\tSubtotal {0}:\t{1} {2}\t{3}\t{4} {5}'.format(countrycode, country_currency[:3],
+            format_currency(country_sum), exchange_rate_formatted, format_currency(country_sum_in_local_currency), local_currency.replace('EUR', '€')))
 
             corporation_sum += country_sum_in_local_currency
 
-        print '\n{0} Total:\t{1} {2}'.format(corporation, format_currency(corporation_sum), local_currency.replace('EUR', '€'))
+        print('\n{0} Total:\t{1} {2}'.format(corporation, format_currency(corporation_sum), local_currency.replace('EUR', '€')))
 
 # -------------------------------------------------------------------------------------------------------------------------------------
 
@@ -269,7 +269,7 @@ if __name__ == '__main__':
 
     sales, currencies, date_range = parse_financial_reports(args.directory)
 
-    print 'Sales date: ' + date_range,
+    print('Sales date: ' + date_range, end = '')
 
     print_sales_by_corporation(sales, currencies, args.no_subtotals, args.only_subtotals)
 
