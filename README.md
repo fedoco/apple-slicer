@@ -31,15 +31,15 @@ Instead, in order to correctly declare business done between you and Apple, **th
 <sup>*)</sup> It used to be iTunes S.à.r.l. in Luxembourg until February 5th, 2017 when Apple merged it with their Irish subsidiary, Apple Distribution International.
 
 ### This is where this script comes handy
-It breaks up App Store sales by country and assigns them to the specific Apple subsidiary which is legally accountable for them - for example,  *Apple Canada, Inc.* for Canadian or *iTunes K.K.* for Japanese sales.
+It breaks up App Store sales by country and assigns them to the specific Apple subsidiary which is legally accountable for them – for example,  *Apple Canada, Inc.* for Canadian or *iTunes K.K.* for Japanese sales.
 The information which country is managed by which Apple subsidiary is taken from Schedule 2, Exhibit A of Apple's *Paid Applications* contract you signed when starting your App Store business.
 
 You can use the output of the script to help genereating *Reverse Charge* invoices for accounting and also in order to correctly issue your *Recapitulative Statements*.
 
 ## How?
 
-In App Store Connect go to *Payments & Financial Reports* and download your financial reports of the desired billing month into an appropriately named directory.
-For example, if you want your sales for September, 2014 to be split, download the financial reports for 2014/09 and move the resulting `*0914*.txt` into a directory named `0914`.
+In App Store Connect go to *Payments & Financial Reports* and download your financial reports (either as *Multiple Files* or *Single File*) of the desired billing month into an appropriately named directory.
+For example, if you want your sales for September, 2022 to be split, download the financial reports for 2022/09 and move the resulting `*0922*.txt` into a directory named `0922`.
 
 Additionally, in order to display revenue in your local currency, the script needs the currency exchange rates and tax withholding amounts that were applicable at the time of the payment.
 They aren't included in the financial report files, but luckily App Store Connect has them available for you in an extra file which can be downloaded by clicking on the small blue icon right above the *Estimated Earnings* column. 
@@ -48,14 +48,14 @@ Place this file in the same directory as the previously downloaded reports. It s
 You are now ready to execute the script with the reports directory as parameter:
 
 ```sh
-./slicer.py ~/Downloads/iTunesFinancialReports/0914
+./slicer.py ~/Downloads/AppStoreFinancialReports/0922
 ```
 ### Example output
 
 The script generates tab-delimited output, more or less ready to be pasted into your favourite billing and/or tax return application.
 
 ```text
-Sales date: 31.08.2014 - 27.09.2014 
+Sales date: 31.08.2022 - 27.09.2022 
 
 Apple Distribution International
 Internet Software & Services
@@ -119,4 +119,4 @@ You need to verify for yourself if the above mentioned procedures are compatible
 Also, it is your obligation alone to check if the numbers the script computes are reasonable.
 
 ## Pull Requests
-Neither English nor Python are my native language - corrective PRs are very welcome!
+Neither English nor Python are my native language – corrective PRs are very welcome!
