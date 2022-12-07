@@ -135,6 +135,15 @@ def parse_currency_data(filename):
         amount_after_tax = Decimal(fields[column_index_amount_after_tax].replace(',', ''))
         earnings = Decimal(fields[column_index_earnings].replace(',', ''))
 
+        # There are very rare cases in which tax is withheld for a country seemingly without corresponding product sales within
+        # the same period. As we can't handle these in a clean way because of the missing product context, just issue a warning:
+        if amount_pre_tax == 0 and amount_after_tax != 0:
+            print('WARNING:')
+            print('Taxes without directly associated product sales have been withheld by Apple for ' + fields[0])
+            print('Please deduct {0} {1} (which is {2} in {3}) manually for that country'.format(currency, format_currency(amount_after_tax), format_currency(earnings), local_currency))
+            print()
+            continue
+
         # calculate the exchange rate explicitly instead of relying on the "Exchange Rate“ column
         # because its value is rounded to 6 decimal places and sometimes not precise enough
         exchange_rate = earnings / amount_after_tax 
