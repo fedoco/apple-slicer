@@ -210,7 +210,7 @@ def parse_financial_reports(workingdir):
 
     return countries, currencies, date_range 
 
-def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
+def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals, selected_corporations):
     """Print sales grouped by Apple subsidiaries, by countries in which the sales have been made and by products sold."""
 
     corporations = {}
@@ -219,6 +219,8 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
         corporations.setdefault(apple.corporation(country), {})[country] = sales[country]
 
     for corporation in corporations:
+        if selected_corporations and corporation not in selected_corporations: continue
+
         corporation_sum = Decimal(0)
         print('\n\n' + apple.address(corporation))
 
@@ -266,9 +268,10 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tool for splitting App Store Connect financial reports by Apple legal entities')
 
+    parser.add_argument('-l', choices=['AU', 'CA', 'EU', 'JP', 'LL', 'US'], nargs='+', dest='selected_corporations', help='limit output to sales of the specified Apple legal entities (Australia, Canada, Europe, Japan, Latin America, United States)')
     subtotals_group = parser.add_mutually_exclusive_group(required=False)
     subtotals_group.add_argument('--no-subtotals', action='store_true', help='omit printing of subtotal for each country')
-    subtotals_group.add_argument('--only-subtotals', action='store_true', help='only print subtotal for each country (i.e. skip per product Euro conversion)')
+    subtotals_group.add_argument('--only-subtotals', action='store_true', help='only print subtotal for each country (i.e. skip per-product Euro conversion)')
     parser.add_argument('directory', help='path to directory that contains App Store Connect financial reports (*.txt) and a file named ' + 
     '"financial_report.csv" which contains matching currency data downloaded from App Store Connect\'s "Payments & Financial Reports" page')
 
@@ -280,6 +283,6 @@ if __name__ == '__main__':
 
     print('Sales date: ' + date_range, end = '')
 
-    print_sales_by_corporation(sales, currencies, args.no_subtotals, args.only_subtotals)
+    print_sales_by_corporation(sales, currencies, args.no_subtotals, args.only_subtotals, args.selected_corporations)
 
     sys.exit(0)
