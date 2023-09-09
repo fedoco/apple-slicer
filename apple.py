@@ -264,8 +264,9 @@ VAT ID: IE9700053D"""
 Japan"""
     elif corporation == 'LL':
         return """Apple Services LATAM LLC
-1 Apple Park Way, MS 169-5CL,
-Cupertino, CA 95014
+1 Alhambra Plaza
+Suite 700
+Coral Gables, FL 33134
 U.S.A."""
     elif corporation == 'US':
         return """Apple Inc.
