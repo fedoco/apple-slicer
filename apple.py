@@ -23,7 +23,7 @@
 # THE SOFTWARE.
 
 # List of countries handled by Apple Inc. and each of Apple's (currently five) foreign subsidiaries.
-# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effecive of August, 2020.
+# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effective of August, 2023.
 
 australia = {
 'AU': 'Australia',
@@ -156,7 +156,7 @@ europe = {
 'TH': 'Thailand',
 'TO': 'Tonga',
 'TN': 'Tunisia',
-'TR': 'Turkey',
+'TR': 'Türkiye',
 'TM': 'Turkmenistan',
 'AE': 'United Arab Emirates',
 'UG': 'Uganda',
