@@ -131,12 +131,17 @@ def parse_currency_data(filename):
             sys.exit(1)
         currency = r.group(1)
 
-        # USD can occur twice in the file: We must take special care to distinguish between USD (and their corresponding
-        # exchange rate) for purchases made in "Americas" and in "Rest of World", as Apple calls it. Unfortunately, Apple
-        # decided to localize the aforementioned strings so they need to be looked up in a translation table. Luckily,
-        # localized report files currently seem to be generated only for French, German, Italian and Spanish locale settings.
+        # USD can occur thrice in the file: We must take special care to distinguish between USD (and their corresponding exchange
+        # rate) for purchases made in "Americas", "Latin America and the Caribbean" and in "Rest of World", as Apple calls it.
+        # Unfortunately, Apple decided to localize the aforementioned strings so they need to be looked up in a translation table.
+        # Luckily, localized report files currently seem to be generated only for French, German, Italian and Spanish locale settings.
+        localizations_LATAM = ["Latein", "Latin"]
         localizations_RoW = ["of World", "du monde", "der Welt", "del mondo", "del mundo"]
         if currency == 'USD':
+            for localization in localizations_LATAM:
+                if localization.lower() in fields[0].lower():
+                    currency = 'USD - LATAM'
+
             for localization in localizations_RoW:
                 if localization.lower() in fields[0].lower():
                     currency = 'USD - RoW'
@@ -210,6 +215,10 @@ def parse_financial_reports(workingdir):
             # those "RoW" countries is to inspect the filename of the sales report
             if "_WW." in filename and currency == "USD":
               currencies[countrycode] = "USD - RoW"
+
+            # same for the "Latin America and the Caribbean" group
+            if "_LL." in filename and currency == "USD":
+              currencies[countrycode] = "USD - LATAM"
 
         f.close()
 
