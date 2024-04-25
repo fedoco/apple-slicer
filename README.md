@@ -2,7 +2,7 @@
 
 ## What?
 This script **parses App Store Connect financial reports** and **splits sales by Apple subsidiaries** which are legally accountable for them.
-It may be used to help generating *Reverse Charge* invoices for accounting and in order to correctly issue *Recapitulative Statements* mandatory in the EU.
+It may be used to help generating *Reverse Charge* invoices for accounting and in order to correctly issue *EC Sales Lists* mandatory in the EU.
 
 ## Why?
 
@@ -17,14 +17,14 @@ Most probably they won't. This is why you need to generate receipts by invoicing
 
 ### But wait! In Europe, there is more to do
 For purchases that have been made in any member state of the European Union, Apple – in the role of your sales commissionaire – is accountable for remitting associated taxes.
-For that reason, your local tax authorities require you to file a periodical *Recapitulative Statement* of those sales in order for them to be able to counter-check Apple's tax returns.
+For that reason, your local tax authorities require you to file a periodical *EC Sales List* (also known as *ESL* or *Recapitulative Statement*) of those sales in order for them to be able to counter-check Apple's tax returns.
 
 This is true if your business is based in the EU. In Germany, for example, the required tax document is called *Zusammenfassende Meldung*.
 
 ### Now for the problem
 While due to Apple's internal cash pooling the wire transfer of your App Store proceeds is issued solely by Apple's European subsidiary in Ireland, namely Apple Distribution International<sup>*)</sup>, the amount transmitted doesn't necessarily consist of European sales only.
 
-In fact, because Apple Distribution International also collects revenue of other countries (at the time being f. ex. also Chinese and generally "rest of world" sales), it would therefore be wrong to declare the whole sum paid by Apple Distribution International in your *Recapitulative Statement*.
+In fact, because Apple Distribution International also collects revenue of other countries (at the time being f. ex. also Chinese and generally "rest of world" sales), it would therefore be wrong to declare the whole sum paid by Apple Distribution International in your *ESL*.
 
 Instead, in order to correctly declare business done between you and Apple, **the sum paid by Apple Distribution International must be split into revenue made in member states of the European Union and into revenue made in Non-EU countries**.
 
@@ -34,7 +34,7 @@ Instead, in order to correctly declare business done between you and Apple, **th
 It breaks up App Store sales by country and assigns them to the specific Apple subsidiary which is legally accountable for them – for example,  *Apple Canada, Inc.* for Canadian or *iTunes K.K.* for Japanese sales.
 The information which country is managed by which Apple subsidiary is taken from Schedule 2, Exhibit A of Apple's *Paid Applications* contract you signed when starting your App Store business.
 
-You can use the output of the script to help genereating *Reverse Charge* invoices for accounting and also in order to correctly issue your *Recapitulative Statements*.
+You can use the output of the script to help genereating *Reverse Charge* invoices for accounting and also in order to correctly issue your *EC Sales Lists*.
 
 ## How?
 
