@@ -112,6 +112,11 @@ JP Total:	 1,16 €
 
 You can configure your local currency (€ in this example) within the script.
 
+## One more thing…
+
+Now, how to actually report sales handled by Apple's EU subsidiary to the tax authorities? With a little help from [Steuererklärung.app](https://steuererklärung-app.de/), it's quite straightforward:
+Run the script with the `-steuerapp-esl` parameter and all that's left to do is to select the current reporting period on the ESL form. Your VAT ID and address data will be remembered by the app after your first successful submission.
+
 ## Obligatory disclaimer
 
 There is absolutely no warranty. I am (thankfully) not a tax advisor and therefore cannot guarantee for the correctness of the above or the Python script in any way.

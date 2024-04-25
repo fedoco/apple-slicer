@@ -61,6 +61,16 @@ def format_currency(number, precise = False):
         # always round to 4 decimal places
         return locale.format_string("%.4f", number, True, True)
 
+def corporations_with_sales_by_country(sales):
+    """Assign lists of sales by country to the corporations they're represented by."""
+
+    corporations = {}
+
+    for country in sales:
+        corporations.setdefault(apple.corporation(country), {})[country] = sales[country]
+
+    return corporations
+
 def parse_currency_data(filename):
     """Parse exchange rate and taxation factor (relevant f. ex. for JPY revenue) for each currency listed in the given file."""
 
@@ -213,10 +223,7 @@ def parse_financial_reports(workingdir):
 def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals, selected_corporations):
     """Print sales grouped by Apple subsidiaries, by countries in which the sales have been made and by products sold."""
 
-    corporations = {}
-
-    for country in sales:
-        corporations.setdefault(apple.corporation(country), {})[country] = sales[country]
+    corporations = corporations_with_sales_by_country(sales)
 
     for corporation in corporations:
         if selected_corporations and corporation not in selected_corporations: continue
@@ -263,6 +270,72 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals, 
 
         print('\n{0} Total:\t{1} {2}'.format(corporation, format_currency(corporation_sum), local_currency.replace('EUR', '€')))
 
+def eu_sales_amount(sales, currencies):
+    """Determine the amount of sales handled by Apple's EU subsidiary."""
+
+    eu_sum = Decimal(0)
+    corporations = corporations_with_sales_by_country(sales)
+
+    for countrycode in corporations['EU']:
+        country_currency = currencies[countrycode]
+        products_sold = corporations['EU'][countrycode]
+        exchange_rate = tax_factor = Decimal('1.00000')
+
+        if not country_currency == local_currency:
+            exchange_rate, tax_factor = currency_data[country_currency]
+
+        for product in products_sold:
+            _, amount = products_sold[product]
+            amount -= amount - amount * tax_factor
+            eu_sum += amount * exchange_rate
+
+    return eu_sum
+
+def steuerapp_esl_import(eu_sales_amount, date_range):
+    """Import EU sales into Steuererklärung.app for filing ESLs"""
+
+    # empty ESL submissions are not necessary if there were no EU sales in the current reporting period
+    if eu_sales_amount == 0: return
+
+    if not local_currency == 'EUR': print('\nWARNING: Currency should be set to Euro if you plan to submit ESLs to German tax authorities')
+
+    eu_sales_amount = str(round(eu_sales_amount))
+    year = date_range[-4:]
+
+    # it's unreliable to determine the current reporting period from Apple's financial reports alone,
+    # so for now export assessment year and EU sales amount only – the sender's VAT ID and address data
+    # will be remembered by Steuererklärung.app after the first submission to the tax authorities
+    plist = f"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Ersteller</key>
+    <string>slicer.py</string>
+    <key>ZM</key>
+    <dict>
+        <key>Veranlagungsjahr</key>
+        <string>{year}</string>
+        <key>Umsätze</key>
+        <array>
+            <dict>
+                <key>USt-IdNr</key>
+                <string>{apple.vat_id_europe}</string>
+                <key>UmsatzArt</key>
+                <string>S</string>
+                <key>UmsatzSumme</key>
+                <string>{eu_sales_amount}</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+</plist>"""
+
+    plist_file = '/tmp/zm.steuerImport'
+    with open(plist_file, 'w') as file: file.write(plist)
+
+    # launch Steuererklärung.app, which will delete the import file automatically upon success
+    os.system(f"open {plist_file}")
+
 # -------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -272,7 +345,8 @@ if __name__ == '__main__':
     subtotals_group = parser.add_mutually_exclusive_group(required=False)
     subtotals_group.add_argument('--no-subtotals', action='store_true', help='omit printing of subtotal for each country')
     subtotals_group.add_argument('--only-subtotals', action='store_true', help='only print subtotal for each country (i.e. skip per-product Euro conversion)')
-    parser.add_argument('directory', help='path to directory that contains App Store Connect financial reports (*.txt) and a file named ' + 
+    parser.add_argument('--steuerapp-esl', action='store_true', help='import EU sales into Steuererklärung.app for filing ESL')
+    parser.add_argument('directory', help='path to directory that contains App Store Connect financial reports (*.txt) and a file named ' +
     '"financial_report.csv" which contains matching currency data downloaded from App Store Connect\'s "Payments & Financial Reports" page')
 
     args = parser.parse_args()
@@ -284,5 +358,7 @@ if __name__ == '__main__':
     print('Sales date: ' + date_range, end = '')
 
     print_sales_by_corporation(sales, currencies, args.no_subtotals, args.only_subtotals, args.selected_corporations)
+
+    if args.steuerapp_esl: steuerapp_esl_import(eu_sales_amount(sales, currencies), date_range)
 
     sys.exit(0)

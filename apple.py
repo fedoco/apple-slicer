@@ -22,6 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# VAT ID of Apple's EU subsidiary
+vat_id_europe = 'IE9700053D'
+
 # List of countries handled by Apple Inc. and each of Apple's (currently five) foreign subsidiaries.
 # Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effective of August, 2023.
 
@@ -256,7 +259,7 @@ Internet Software & Services
 Hollyhill Industrial Estate
 Hollyhill, Cork
 Republic of Ireland
-VAT ID: IE9700053D"""
+VAT ID: """ + vat_id_europe
     elif corporation == 'JP':
         return """iTunes K.K.
 〒 106-6140
