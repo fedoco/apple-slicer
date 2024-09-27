@@ -25,8 +25,30 @@
 # VAT ID of Apple's EU subsidiary
 vat_id_europe = 'IE9700053D'
 
-# List of countries handled by Apple Inc. and each of Apple's (currently five) foreign subsidiaries.
-# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effective of August, 2023.
+# List of countries handled by Apple Inc. and each of Apple's (currently six) foreign subsidiaries.
+# Information is taken from Schedule 2, Exhibit A of Apple's "iOS / macOS Paid Applications" contract as effective of October 26, 2024.
+
+apac = {
+'BT': 'Bhutan',
+'BN': 'Brunei',
+'KH': 'Cambodia',
+'FM': 'Federal States of Micronesia',
+'FJ': 'Fiji',
+'KR': 'Korea',
+'LA': 'Laos',
+'MO': 'Macao',
+'MV': 'Maldives',
+'MN': 'Mongolia',
+'MM': 'Myanmar',
+'NR': 'Nauru',
+'NP': 'Nepal',
+'PW': 'Palau',
+'PG': 'Papua New Guinea',
+'SB': 'Solomon Islands',
+'LK': 'Sri Lanka',
+'TO': 'Tonga',
+'VU': 'Vanuatu'
+}
 
 australia = {
 'AU': 'Australia',
@@ -49,13 +71,10 @@ europe = {
 'BY': 'Belarus',
 'BE': 'Belgium',
 'BJ': 'Benin',
-'BT': 'Bhutan',
 'BA': 'Bosnia and Herzegovina',
 'BW': 'Botswana',
-'BN': 'Brunei',
 'BG': 'Bulgaria',
 'BF': 'Burkina-Faso',
-'KH': 'Cambodia',
 'CM': 'Cameroon',
 'CV': 'Cape Verde',
 'TD': 'Chad',
@@ -69,7 +88,6 @@ europe = {
 'DK': 'Denmark',
 'EG': 'Egypt',
 'EE': 'Estonia',
-'FJ': 'Fiji',
 'FI': 'Finland',
 'FR': 'France',
 'GA': 'Gabon',
@@ -91,45 +109,34 @@ europe = {
 'JO': 'Jordan',
 'KZ': 'Kazakhstan',
 'KE': 'Kenya',
-'KR': 'Korea',
 'XK': 'Kosovo',
 'KW': 'Kuwait',
 'KG': 'Kyrgyzstan',
-'LA': 'Laos',
 'LV': 'Latvia',
 'LB': 'Lebanon',
 'LR': 'Liberia',
 'LY': 'Libya',
 'LT': 'Lithuania',
 'LU': 'Luxembourg',
-'MO': 'Macao',
 'MK': 'Macedonia',
 'MG': 'Madagascar',
 'MW': 'Malawi',
 'MY': 'Malaysia',
-'MV': 'Maldives',
 'ML': 'Mali',
 'MT': 'Republic of Malta',
 'MR': 'Mauritania',
 'MU': 'Mauritius',
-'FM': 'Federal States of Micronesia',
 'MD': 'Moldova',
-'MN': 'Mongolia',
 'ME': 'Montenegro',
 'MA': 'Morocco',
 'MZ': 'Mozambique',
-'MM': 'Myanmar',
 'NA': 'Namibia',
-'NR': 'Nauru',
-'NP': 'Nepal',
 'NL': 'Netherlands',
 'NE': 'Niger',
 'NG': 'Nigeria',
 'NO': 'Norway',
 'OM': 'Oman',
 'PK': 'Pakistan',
-'PW': 'Palau',
-'PG': 'Papua New Guinea',
 'PH': 'Philippines',
 'PL': 'Poland',
 'PT': 'Portugal',
@@ -146,10 +153,8 @@ europe = {
 'SG': 'Singapore',
 'SK': 'Slovakia',
 'SI': 'Slovenia',
-'SB': 'Solomon Islands',
 'ZA': 'South Africa',
 'ES': 'Spain',
-'LK': 'Sri Lanka',
 'SZ': 'Swaziland',
 'SE': 'Sweden',
 'CH': 'Switzerland',
@@ -157,7 +162,6 @@ europe = {
 'TJ': 'Tajikistan',
 'TZ': 'Tanzania',
 'TH': 'Thailand',
-'TO': 'Tonga',
 'TN': 'Tunisia',
 'TR': 'Türkiye',
 'TM': 'Turkmenistan',
@@ -166,7 +170,6 @@ europe = {
 'UA': 'Ukraine',
 'GB': 'United Kingdom',
 'UZ': 'Uzbekistan',
-'VU': 'Vanuatu',
 'VN': 'Vietnam',
 'YE': 'Yemen',
 'ZM': 'Zambia',
@@ -221,10 +224,11 @@ us = {
 'US': 'United States'
 }
 
-corporations = [australia, canada, europe, japan, latam, us]
+corporations = [apac, australia, canada, europe, japan, latam, us]
 
 def corporation(cc):
     """Get Apple subsidiary handling sales of the given country"""
+    if cc in apac: return 'AP'
     if cc in australia: return 'AU'
     if cc in canada: return 'CA'
     if cc in europe: return 'EU'
@@ -242,11 +246,16 @@ def countryname(cc):
 
 def address(corporation):
     """Get billing address of Apple subsidiary with given handle"""
-    if corporation == 'AU':
+    if corporation == 'AP':
+        return """Apple Services Pte. Ltd.
+7 Ang Mo Kio Street 64
+Singapore 569086
+Singapore"""
+    elif corporation == 'AU':
         return """Apple Pty Limited
 Level 3
 20 Martin Place
-Sydney South 2000
+Sydney NSW 2000
 Australia"""
     elif corporation == 'CA':
         return """Apple Canada Inc.

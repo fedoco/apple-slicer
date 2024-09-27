@@ -47,6 +47,17 @@ currency_data_filename = 'financial_report.csv'
 
 # -------------------------------------------------------------------------------------------------------------------------------------
 
+# US dollars may occur multiple times in financial_report.csv due to different exchange rates for each world region they're
+# used in: Care must be taken to distinguish between USD for purchases made in the region "Americas" (the default), or in
+# regions "South Asia and Pacific", "Latin America and the Caribbean" and "Rest of World", as Apple calls it.
+# Unfortunately, Apple decided to localize these strings, so they need to be looked up in the following spelling table.
+# Luckily, localized report files currently seem to be generated only for French, German, Italian and Spanish locale settings.
+usd_regions_localizations = {
+    'AP': ['Pacif', 'Pacíf', 'Pazif'], # South Asia and Pacific
+    'LL': ['Latin', 'Latein'], # Latin America and the Caribbean
+    'WW': ['of World', 'du monde', 'der Welt', 'del mondo', 'del mundo'] # Rest of World
+}
+
 def format_date(date_str):
     """Formats an US-style date string according to the default format of the current locale."""
     return datetime.strptime(date_str,"%m/%d/%Y").strftime('%x')
@@ -131,21 +142,13 @@ def parse_currency_data(filename):
             sys.exit(1)
         currency = r.group(1)
 
-        # USD can occur thrice in the file: We must take special care to distinguish between USD (and their corresponding exchange
-        # rate) for purchases made in "Americas", "Latin America and the Caribbean" and in "Rest of World", as Apple calls it.
-        # Unfortunately, Apple decided to localize the aforementioned strings so they need to be looked up in a translation table.
-        # Luckily, localized report files currently seem to be generated only for French, German, Italian and Spanish locale settings.
-        localizations_LATAM = ["Latein", "Latin"]
-        localizations_RoW = ["of World", "du monde", "der Welt", "del mondo", "del mundo"]
+        # for any region of the world in which Apple bills in USD, a distinct exchange rate may have been used
         if currency == 'USD':
-            for localization in localizations_LATAM:
-                if localization.lower() in fields[0].lower():
-                    currency = 'USD - LATAM'
+            for region, localized_region_spellings in usd_regions_localizations.items():
+                if any(spelling.lower() in fields[0].lower() for spelling in localized_region_spellings):
+                    currency = 'USD' + region # should serve as a unique key for the current region's USD variety
+                    break
 
-            for localization in localizations_RoW:
-                if localization.lower() in fields[0].lower():
-                    currency = 'USD - RoW'
- 
         amount_pre_tax = Decimal(fields[column_index_amount_pre_tax].replace(',', ''))
         amount_after_tax = Decimal(fields[column_index_amount_after_tax].replace(',', ''))
         earnings = Decimal(fields[column_index_earnings].replace(',', ''))
@@ -210,15 +213,13 @@ def parse_financial_reports(workingdir):
             # remember currency of current line's country
             currencies[countrycode] = currency
 
-            # special case affecting countries Apple put in the "Rest of World" group: currency for those is listed as "USD"
-            # in the sales reports but the corresponding exchange rate is keyed "USD - RoW" - a pragmatic way of identifying
-            # those "RoW" countries is to inspect the filename of the sales report
-            if "_WW." in filename and currency == "USD":
-              currencies[countrycode] = "USD - RoW"
-
-            # same for the "Latin America and the Caribbean" group
-            if "_LL." in filename and currency == "USD":
-              currencies[countrycode] = "USD - LATAM"
+            # if the current country uses USD, identify which world region's USD exchange rate
+            # applies – a pragmatic way to do this is to inspect the filename of its sales report
+            if currency == 'USD':
+                for region in usd_regions_localizations.keys():
+                    if f'_{region}.' in filename:
+                        currencies[countrycode] = 'USD' + region
+                        break
 
         f.close()
 
@@ -350,7 +351,7 @@ def steuerapp_esl_import(eu_sales_amount, date_range):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tool for splitting App Store Connect financial reports by Apple legal entities')
 
-    parser.add_argument('-l', choices=['AU', 'CA', 'EU', 'JP', 'LL', 'US'], nargs='+', dest='selected_corporations', help='limit output to sales of the specified Apple legal entities (Australia, Canada, Europe, Japan, Latin America, United States)')
+    parser.add_argument('-l', choices=['AP', 'AU', 'CA', 'EU', 'JP', 'LL', 'US'], nargs='+', dest='selected_corporations', help='limit output to sales of the specified Apple legal entities (South Asia and Pacific, Australia, Canada, Europe, Japan, Latin America, United States)')
     subtotals_group = parser.add_mutually_exclusive_group(required=False)
     subtotals_group.add_argument('--no-subtotals', action='store_true', help='omit printing of subtotal for each country')
     subtotals_group.add_argument('--only-subtotals', action='store_true', help='only print subtotal for each country (i.e. skip per-product Euro conversion)')
