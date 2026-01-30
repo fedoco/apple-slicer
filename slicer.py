@@ -159,14 +159,12 @@ def parse_currency_data(filename):
         # If the report has no payout for this currency, avoid division by zero.
         # Keep a zero exchange rate so totals in local currency are zero.
         if amount_after_tax == 0:
-            result[currency] = Decimal('0'), Decimal('1.00000'), adjustments
+            result[currency] = Decimal(0), Decimal('1.00000'), adjustments
             continue
 
         # There are very rare cases in which tax is withheld for a country seemingly without corresponding product sales within
         # the same period. As we can't handle these in a clean way because of the missing product context, just issue a warning:
-        amount_after_tax_no_adjustments = amount_after_tax - adjustments
-
-        if amount_pre_tax == 0 and amount_after_tax_no_adjustments != 0:
+        if amount_pre_tax == 0 and amount_after_tax - adjustments != 0:
             print('WARNING:')
             print('Taxes without directly associated product sales have been withheld by Apple for ' + fields[0])
             print('Please deduct {0} {1} (which is {2} in {3}) manually for that country'.format(currency, format_currency(amount_after_tax), format_currency(earnings), local_currency))
@@ -177,7 +175,7 @@ def parse_currency_data(filename):
         # because its value is rounded to 6 decimal places and sometimes not precise enough
         exchange_rate = earnings / amount_after_tax
 
-        tax = amount_pre_tax - amount_after_tax_no_adjustments
+        tax = amount_pre_tax - amount_after_tax - adjustments
         tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
 
         result[currency] = exchange_rate, tax_factor, adjustments
@@ -261,7 +259,7 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals, 
             print('\tQuantity\tProduct\tAmount\tExchange Rate\tAmount in ' + local_currency)
 
             exchange_rate = tax_factor = Decimal('1.00000')
-            if country_currency in currency_data:
+            if not country_currency == local_currency:
                 exchange_rate, tax_factor, _ = currency_data[country_currency]
             exchange_rate_formatted = locale.format_string("%.5f", exchange_rate)
 
@@ -292,8 +290,6 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals, 
         # apply adjustments once per currency (not per country)
         currencies_in_corporation = {currencies[countrycode] for countrycode in corporations[corporation]}
         for currency in sorted(currencies_in_corporation):
-            if currency not in currency_data:
-                continue
             exchange_rate, _, adjustments = currency_data[currency]
             if adjustments == 0:
                 continue
@@ -315,9 +311,9 @@ def eu_sales_amount(sales, currencies):
         country_currency = currencies[countrycode]
         products_sold = corporations['EU'][countrycode]
         exchange_rate = tax_factor = Decimal('1.00000')
-        adjustments = Decimal('0.00000')
+        adjustments = Decimal(0)
 
-        if country_currency in currency_data:
+        if not country_currency == local_currency:
             exchange_rate, tax_factor, adjustments = currency_data[country_currency]
 
         for product in products_sold:
@@ -328,8 +324,6 @@ def eu_sales_amount(sales, currencies):
     # apply adjustments once per currency (not per country)
     currencies_in_eu = {currencies[countrycode] for countrycode in corporations['EU']}
     for currency in currencies_in_eu:
-        if currency not in currency_data:
-            continue
         exchange_rate, _, adjustments = currency_data[currency]
         eu_sum += adjustments * exchange_rate
 
