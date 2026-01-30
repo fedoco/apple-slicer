@@ -287,16 +287,21 @@ def print_sales_by_corporation(sales, currencies, no_subtotals, only_subtotals, 
 
             corporation_sum += country_sum_in_local_currency
 
-        # apply adjustments once per currency (not per country)
+        # apply adjustments once per currency (n.b.: not per country)
+        adjustments_header_printed = False
         currencies_in_corporation = {currencies[countrycode] for countrycode in corporations[corporation]}
         for currency in sorted(currencies_in_corporation):
             exchange_rate, _, adjustments = currency_data[currency]
             if adjustments == 0:
                 continue
+            if not adjustments_header_printed:
+                adjustments_header_printed = True
+                print('\nCurrency adjustments')
+                print('\tCurrency\tAmount\tExchange Rate\tAmount in ' + local_currency)
             adjustments_in_local_currency = adjustments * exchange_rate
             corporation_sum += adjustments_in_local_currency
             exchange_rate_formatted = locale.format_string("%.5f", exchange_rate)
-            print('\nAdjustments {0}:\t{1} {2}\t{3}\t{4} {5}'.format(currency, currency[:3],
+            print('\t{0}\t{1} {2}\t{3}\t{4} {5}'.format(currency, currency[:3],
             format_currency(adjustments), exchange_rate_formatted, format_currency(adjustments_in_local_currency), local_currency.replace('EUR', '€')))
 
         print('\n{0} Total:\t{1} {2}'.format(corporation, format_currency(corporation_sum), local_currency.replace('EUR', '€')))
@@ -311,17 +316,16 @@ def eu_sales_amount(sales, currencies):
         country_currency = currencies[countrycode]
         products_sold = corporations['EU'][countrycode]
         exchange_rate = tax_factor = Decimal('1.00000')
-        adjustments = Decimal(0)
 
         if not country_currency == local_currency:
-            exchange_rate, tax_factor, adjustments = currency_data[country_currency]
+            exchange_rate, tax_factor, _ = currency_data[country_currency]
 
         for product in products_sold:
             _, amount = products_sold[product]
             amount -= amount - amount * tax_factor
             eu_sum += amount * exchange_rate
 
-    # apply adjustments once per currency (not per country)
+    # apply adjustments once per currency (n.b.: not per country)
     currencies_in_eu = {currencies[countrycode] for countrycode in corporations['EU']}
     for currency in currencies_in_eu:
         exchange_rate, _, adjustments = currency_data[currency]
