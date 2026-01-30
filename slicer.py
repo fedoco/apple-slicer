@@ -153,6 +153,12 @@ def parse_currency_data(filename):
         amount_after_tax = Decimal(fields[column_index_amount_after_tax].replace(',', ''))
         earnings = Decimal(fields[column_index_earnings].replace(',', ''))
 
+        # If the report has no payout for this currency, avoid division by zero.
+        # Keep a zero exchange rate so totals in local currency are zero.
+        if amount_after_tax == 0:
+            result[currency] = Decimal('0'), Decimal('1.00000')
+            continue
+
         # There are very rare cases in which tax is withheld for a country seemingly without corresponding product sales within
         # the same period. As we can't handle these in a clean way because of the missing product context, just issue a warning:
         if amount_pre_tax == 0 and amount_after_tax != 0:
