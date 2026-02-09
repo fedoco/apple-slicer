@@ -175,7 +175,7 @@ def parse_currency_data(filename):
         # because its value is rounded to 6 decimal places and sometimes not precise enough
         exchange_rate = earnings / amount_after_tax
 
-        tax = amount_pre_tax - amount_after_tax - adjustments
+        tax = amount_pre_tax - (amount_after_tax - adjustments)
         tax_factor = Decimal(1.0) - abs(tax / amount_pre_tax)
 
         result[currency] = exchange_rate, tax_factor, adjustments
